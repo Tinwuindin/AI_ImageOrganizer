@@ -1,0 +1,27 @@
+# PyTorch con CUDA 12.6 (compatible con la RTX 4060 y controladores recientes).
+--extra-index-url https://download.pytorch.org/whl/cu126
+torch==2.13.0+cu126
+torchvision==0.28.0+cu126
+
+# Modelos: EmbeddingGemma 2 necesita transformers con la arquitectura embedding_gemma2.
+transformers==5.22.1
+sentence-transformers==6.2.0
+huggingface_hub>=1.27,<2
+
+# Índice vectorial y agrupación
+faiss-cpu==1.15.1
+scikit-learn==1.8.0
+numpy>=1.26,<3
+
+# Imágenes
+pillow==12.2.0
+pillow-heif==1.8.1
+
+# Servidor web
+fastapi==0.141.1
+uvicorn==0.52.3
+httpx==0.28.1
+PyYAML==6.0.3
+
+# Pruebas
+pytest==8.3.5

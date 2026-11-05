@@ -1,0 +1,81 @@
+# Configuración del organizador de imágenes.
+# Las rutas relativas parten de la raíz del proyecto.
+# Los valores por defecto están medidos en una RTX 4060 de 8 GB.
+
+server:
+  host: 127.0.0.1
+  port: 8765
+  open_browser: true
+
+paths:
+  data_dir: data
+  llama_server: tools/llama.cpp/llama-server.exe
+
+scanner:
+  extensions: [.jpg, .jpeg, .png, .webp, .bmp, .gif, .tif, .tiff, .heic, .heif]
+  exclude_dirs: ["$RECYCLE.BIN", "System Volume Information", ".git", "node_modules"]
+  workers: 4
+  thumbnail_size: 384
+  max_image_pixels: 500000000
+
+embedding:
+  model_path: models/embeddinggemma-2
+  model_name: google/embeddinggemma-2
+  dimension: 768
+  # Un lote mayor no acelera: solo usa más VRAM (8 → 1.6 GB, 32 → 3.6 GB).
+  batch_size: 8
+  image_max_side: 768
+  # Presupuesto de tokens por imagen: 70, 140, 280, 560 o 1120.
+  # 280 → unas 8 img/s; 140 → 16 img/s; 70 → 32 img/s.
+  image_tokens: 280
+  query_threads: 4
+  # Cada cuántas imágenes se guarda el avance en disco.
+  checkpoint_every: 256
+
+gemma:
+  model_path: models/gemma-4-e2b-q4/gemma-4-E2B_q4_0-it.gguf
+  mmproj_path: models/gemma-4-e2b-q4/gemma-4-E2B-it-mmproj.gguf
+  model_version: gemma-4-E2B-it-qat-q4_0
+  context_size: 4096
+  gpu_layers: 999
+  # Suficiente para los límites de longitud del esquema JSON.
+  max_tokens: 500
+  temperature: 0.1
+  image_max_side: 768
+  image_tokens: 280
+  startup_timeout: 180
+  request_timeout: 180
+  max_retries: 2
+  # El análisis se detiene si fallan tantas imágenes seguidas.
+  max_consecutive_failures: 10
+
+clustering:
+  pca_components: 50
+  min_cluster_size: 5
+  min_samples: 3
+  selection_method: leaf
+
+classification:
+  # false analiza cada imagen con Gemma (unas 4 h por cada 10,000).
+  use_clusters: true
+  min_representatives: 3
+  max_representatives: 12
+  # Proporción de representantes que debe coincidir para validar un grupo.
+  min_agreement: 0.8
+  # Una imagen se analiza sola si dista de su grupo más que media + N desviaciones.
+  ambiguity_std: 1.5
+
+search:
+  default_limit: 60
+  candidates: 200
+  rrf_k: 60
+
+organization:
+  default_template: "{category}/{subcategory}"
+  # Las subcategorías con menos imágenes se agrupan en una carpeta "Varios".
+  min_subcategory_size: 5
+  # Por debajo de esta confianza, la imagen queda desmarcada en la propuesta.
+  # Medido con 290 fotos: 0.8 marca el 5 % de los aciertos y el 68 % de los errores;
+  # 0.9 marca el 6 % y el 76 %.
+  min_confidence: 0.8
+  duplicates_folder: _Duplicados

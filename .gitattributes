@@ -1,0 +1,2 @@
+# cmd.exe no ejecuta bien los .bat con finales de línea LF.
+*.bat text eol=crlf

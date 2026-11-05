@@ -1,0 +1,20 @@
+# Entorno de Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Pesos de modelos y binarios descargados
+models/*
+!models/.gitkeep
+tools/
+
+# Datos locales: índice, miniaturas y base de datos de la biblioteca
+data/*
+!data/.gitkeep
+
+# Editores y sistema
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
